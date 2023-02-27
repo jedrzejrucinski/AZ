@@ -63,6 +63,43 @@ head(probka)
 #a
 plot(probka$x, probka$y)
 #b
-korelacja <- cov(probka$x,probka$y)/sqrt(var(probka$x)*var(probka$y))
+x <- probka$x
+y <- probka$y
+korelacja <- sum((x-mean(x))*(y-mean(y)))/sqrt(sum((x-mean(x))**2)*sum((y-mean(y))**2))
 korelacja
 cor(probka$x,probka$y)
+#c
+n <- length(x)
+2*(1-pnorm(sqrt(n)*korelacja,0,1))
+#d
+tanh(atanh(korelacja) + qnorm(0.975)/sqrt(n))
+tanh(atanh(korelacja) - qnorm(0.975)/sqrt(n))
+
+tanh(atanh(korelacja) +c(-1,1)*qnorm(0.975)/sqrt(n))
+#e
+# spearmana z def:
+xr <- rank(x)
+yr <- rank(y)
+cor(xr, yr)
+plot(xr,yr)
+
+#f
+cor(x,y,method = 'spearman')
+cor(x,y,method = 'kendall')
+# kendalla z def:
+zl <- 0
+for(i in 1:n)
+{
+  for(j in i:n)
+  {
+    zl <- zl + sign((x[i]-x[j])*(y[i]-y[j]))
+  }
+}
+zl <- zl/(n*(n-1)/2)
+zl
+#g
+# przyklad gdy mamy powtarzajace sie wartosci
+xl <- c(x,x[n])
+yl <- c(y,y[n])
+rank(xl)
+rank(yl)
